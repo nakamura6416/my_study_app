@@ -1,184 +1,254 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-	<link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
-	<link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-	<link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic&family=Kumar+One&family=Shippori+Antique&display=swap" rel="stylesheet">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>my_study_app</title>
-	<style>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link
+			href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic&family=Kumar+One&family=Shippori+Antique&display=swap"
+			rel="stylesheet">
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<title>ToolBox</title>
+	</head>
+	<style scoped>
 		[v-cloak] {
-			display:none;
+			display: none;
 		}
-		.container {
-			width: 700px;
-		}
-		.time_cols {
-			width: 350px;
-		}
-		.time_Font {
-			font-size: 5rem;
+
+		.font-KumarOne {
 			font-family: 'Kumar One', cursive;
 		}
-		.title_Font {
-			font-size: 2rem;
-			font-family: 'Shippori Antique', sans-serif;
+
+		.font-Arial {
+			font-family: 'Arial';
+		}
+
+		input[type="time"]::-webkit-calendar-picker-indicator {
+			display: none;
+			-webkit-appearance: none;
+		}
+
+		input[type="time"]::-moz-clear {
+			display: none;
+		}
+
+		input[type="time"]::-ms-clear {
+			display: none;
 		}
 	</style>
-</head>
-<body>
-	<div id="app">
-		<v-app>
-			<v-container class="d-flex justify-center align-center container">
-				<v-row>
-					<v-col class="d-flex justify-center flex-column align-center time_cols">
-						<!-- 現在時刻 -->
-						<p v-cloak class="time_Font" style="width: 350px; margin: 0;">{{ time }}</p>
-						<!-- 本日の日付 -->
-						<p class="title_Font mt-n10" style="width: 350px; margin: 0; padding-top: 10px;">{{today}}</p>
-					</v-col>
-					<v-col class="d-flex flex-column align-center" style="width: 300px;">
-						<!-- カウントダウンタイマー -->
-						<v-card  max-width="285" variant="outlined">
-							<v-list-item two-line>
-								<v-list-item-content>
-									<v-list-item-title class="text-h5 mb-3">CountdownTimer</v-list-item-title>
-									<v-list-item-subtitle class="text-h3">
-										<input type="time" step="1" v-model="cTime">
-									</v-list-item-subtitle>
-								</v-list-item-content>
-							</v-list-item>
-							<v-card-actions>
-								<v-btn outlined text v-if="isTimerStopped" @click="startTimer()">Start</v-btn>
-								<v-btn  outlined text v-else @click="stopTimer()">Stop</v-btn>
-								<v-btn outlined text @click="resetTimer()">Reset</v-btn>
-							</v-card-actions>
-						</v-card>
-						<div>
-							<v-dialog v-model="dialog" width="300">
-								<v-card>
-									<v-card-title class="justify-center text-h5">
-										Time is up !
-									</v-card-title>
-									<v-card-actions>
-										<v-btn outlined class="mx-auto" @click="dialog = false">Close</v-btn>
-									</v-card-actions>
-								</v-card>
-							</v-dialog>
-						</div>
-					</v-col>
-				</v-row>				
-			</v-container>
-		</v-app>
-	</div>
-	  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.11/dist/vue.js"></script>
-	  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 
-	<script>
-		let app = new Vue({
-			el: '#app',
-			vuetify: new Vuetify(),
-				data() {
-					return {
-						time: '',
-						date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-						menu: false,
-						initialTime: '00:00:00',
-						cTime: '00:00:00',
-						sec: 0,
-						timerId: 0,
-						isTimerStopped: true,
-						dialog: false,
-					}
-				},
-				mounted: function() {
-					let timerID = setInterval(this.updateTime, 1000); 
-				},
-				methods: {
-					updateTime: function() {
-						let date = new Date();
-						let Hour = date.getHours();
-						let Min = this.zeroPadding(date.getMinutes(), 2);
-						let Sec = this.zeroPadding(date.getSeconds(), 2);
-						this.time = `${Hour}:${Min}:${Sec}`;
-					},
-					zeroPadding: function(num, len) {
+	<body>
+		<div id="app">
+			<div class="
+				flex flex-col justify-start
+				p-5 mb-5 space-y-3
+				bg-blue-600" v-cloak>
+				<p class="
+					w-72 translate-y-3
+					text-7xl text-left font-KumarOne
+					text-white">{{ currentTime }}</p>
+				<p class="
+					translate-y-1
+					text-4xl font-semibold font-Arial
+					text-white">{{ currentDate }}</p>
+			</div>
+			<div class="p-5 flex justify-center">
+				<div class="
+					p-4 w-72 space-y-4 border border-slate-400 rounded-xl
+					text-center font-Arial
+					shadow-lg">
+					<p class="text-xl">CountdownTimer</p>
+					<input class="text-5xl" type="time" step="1" v-model="cTime">
+					<div class="space-x-3">
+						<button class="
+							py-1 w-20 border border-slate-400 hover:border-slate-950 rounded-md 
+							text-center hover:font-bold
+							shadow-lg" type="button" v-if="isTimerStopped" @click="startTimer()">START</button>
+						<button class="
+							py-1 w-20 rounded-md
+							text-center text-white
+							bg-red-400 hover:bg-red-300 shadow-lg" v-else @click="stopTimer()">STOP</button>
+						<button class="
+							py-1 w-20 border border-slate-400 hover:border-slate-950 rounded-md
+							text-center hover:font-bold
+							shadow-lg" @click="resetTimer()">RESET</button>
+					</div>
+				</div>
+			</div>
+			<div>
+				<div class="
+					fixed inset-0 size-full flex items-center justify-center
+					font-Arial
+					bg-gray-800 bg-opacity-75" v-if="dialog">
+					<div class="
+						p-6 w-72 space-y-5 border rounded-xl
+						text-center
+						bg-white">
+							<p class="text-4xl">Time is up !</p>
+							<button class="
+								py-1 w-20 rounded-md
+								text-center text-white
+								bg-blue-400 hover:bg-blue-300 shadow-lg" @click="dialog = false">CLOSE</button>
+					</div>
+				</div>
+			</div>
+			<div class="flex flex-col justify-center items-center p-5 space-y-4">
+				<textarea class="border border-slate-400 w-96 h-96" v-model="memoContent"></textarea>
+				<div class="w-96 flex justify-end">
+					<button class="
+						px-2 py-1 border rounded-md
+						text-center text-white
+						bg-blue-400 hover:bg-blue-300 shadow-lg" @click="savuMemo()">SAVE</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			const { createApp, ref, onMounted, onUnmounted, watch } = Vue;
+
+			createApp({
+				setup() {
+					const currentTime = ref('');
+					const timeUpdateId = ref(0);
+					const dateUpdateId = ref(0);
+					const currentDate = ref('');
+					const date = ref((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10));
+					const initialTime = ref('00:00:00');
+					const cTime = ref('00:00:00');
+					const sec = ref(0);
+					const timerId = ref(0);
+					const isTimerStopped = ref(true);
+					const dialog = ref(false);
+					const hourInSec = 3600;
+					const minInSec = 60;
+					const memoContent = ref('');
+
+					function zeroPadding(num, len) {
 						let zero = '';
-
-						// 0の文字列を作成
-						for(let i = 0; i < len; i++) {
+						for (let i = 0; i < len; i++) {
 							zero += '0';
 						}
-
-						// zeroの文字列と、数字を結合し、後ろ２文字を返す
 						return (zero + num).slice(-len);
-					},
-					timeToSec(t) {
+					};
+
+					function updatetime() {
+						const date = new Date();
+						const Hour = date.getHours();
+						const Min = zeroPadding(date.getMinutes(), 2);
+						const Sec = zeroPadding(date.getSeconds(), 2);
+						currentTime.value = `${Hour}:${Min}:${Sec}`;
+					};
+
+					function updateDate() {
+						const date = new Date();
+						const Year = date.getFullYear();
+						const Month = zeroPadding(date.getMonth() + 1, 2);
+						const getDate = zeroPadding(date.getDate(), 2);
+						const dayOfWeek = date.getDay();
+						const dayOfWeekStr = ["Sunday", "Monday", "Tuesday", "Wednesday", "thursday", "Friday", "Saturday"];
+						currentDate.value = `${Year}/${Month}/${getDate} ${dayOfWeekStr[dayOfWeek]}`;
+					};
+
+					function timeToSec(t) {
 						const [h, m, s] = t.split(':').map(e => parseInt(e));
-						if (s === undefined) return 0;
-						return h * this.hourInSec + m * this.minInSec + s;
-					},
-					secToTime(s){
+						return (h || 0) * hourInSec + (m || 0) * minInSec + (s || 0);
+					};
+
+					function secToTime(s) {
 						return new Date(s * 1000).toISOString().slice(11, 19);
-					},
-					countDownInner(){
-						this.sec--;
-						this.cTime = this.secToTime(this.sec);
-					},
-					countDown(){
-						this.timerId = setInterval(this.countDownInner, 1000);
-					},
-					startTimer(){
-						this.sec = this.timeToSec(this.cTime);
-						if (this.sec <= 0) return;
-						this.isTimerStopped = false;
-						this.countDown();
-					},
-					stopTimer(){
-						clearInterval(this.timerId);
-						this.isTimerStopped = true;
-					},
-					resetTimer(){
-						this.stopTimer();
-						this.cTime = this.initialTime;
-					},
-					timeAlert(){
-						this.dialog = true;
-					}
-				},
-				computed: {
-					today: function () {
-						let new_date = new Date();
-						let Year = new_date.getFullYear();
-						let Month = this.zeroPadding(new_date.getMonth()+1, 2);
-						let date = this.zeroPadding(new_date.getDate(), 2);
-						let dayOfWeek = new_date.getDay();
-						let dayOfWeekStr = [ "Sunday", "Monday", "Tuesday", "Wednesday", "thursday", "Friday", "Saturday" ];
-						return `${Year}/${Month}/${date}　${dayOfWeekStr[dayOfWeek]}`;
-					},
-					hourInSec() {
-						return 3600;
-					},
-					minInSec() {
-						return 60;
-					}
-				},
-				watch: {
-					sec() {
-						if (!this.isTimerStopped && this.sec <= 0) {
-							this.timeAlert();
-							this.resetTimer();
+					};
+
+					function countdownInner() {
+						sec.value--;
+						cTime.value = secToTime(sec.value);
+					};
+
+					function countdown() {
+						timerId.value = setInterval(countdownInner, 1000);
+					};
+
+					function startTimer() {
+						sec.value = timeToSec(cTime.value);
+						if (sec.value <= 0) return;
+						isTimerStopped.value = false;
+						countdown();
+					};
+
+					function stopTimer() {
+						clearInterval(timerId.value);
+						isTimerStopped.value = true;
+					};
+
+					function resetTimer() {
+						stopTimer();
+						cTime.value = initialTime.value;
+					};
+
+					function timeAlert() {
+						dialog.value = true;
+					};
+
+					function savuMemo() {
+						const parsed = JSON.stringify(memoContent.value);
+						localStorage.setItem('memo', parsed);
+					};
+
+					onMounted(() => {
+						timeUpdateId.value = setInterval(updatetime, 1000);
+
+						updateDate();
+						const now = new Date();
+						const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+						const timeUntilMidnight = tomorrow - now
+
+						setTimeout(() => {
+							updateDate();
+							dateUpdateId.value = setInterval(updateDate, 24 * 60 * 60 * 1000);
+						}, timeUntilMidnight);
+
+						const savuMemo = JSON.parse(localStorage.getItem('memo'));
+						if (savuMemo) {
+							memoContent.value = savuMemo;
 						}
+					});
+
+					onUnmounted(() => {
+						if (timeUpdateId.value) {
+							clearInterval(timeUpdateId.value);
+						}
+						if (dateUpdateId.value) {
+							clearInterval(dateUpdateId.value);
+						}
+					});
+
+					watch(sec, (newSec) => {
+						if (!isTimerStopped.value && newSec <= 0) {
+							timeAlert();
+							resetTimer();
+						}
+					});
+
+					return {
+						currentTime,
+						currentDate,
+						date,
+						initialTime,
+						cTime,
+						sec,
+						timerId,
+						isTimerStopped,
+						dialog,
+						hourInSec,
+						minInSec,
+						startTimer,
+						stopTimer,
+						resetTimer,
+						memoContent,
+						savuMemo
 					}
 				}
-	})
-	</script>
-</body>
+			}).mount('#app')
+		</script>
+	</body>
 </html>
