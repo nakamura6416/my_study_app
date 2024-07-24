@@ -94,14 +94,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="flex flex-col justify-center items-center p-5 space-y-4">
-				<textarea class="border border-slate-400 w-96 h-96" v-model="memoContent"></textarea>
-				<div class="w-96 flex justify-end">
-					<button class="
-						px-2 py-1 border rounded-md
-						text-center text-white
-						bg-blue-400 hover:bg-blue-300 shadow-lg" @click="savuMemo()">SAVE</button>
-				</div>
+			<div class="flex flex-col justify-center items-center pt-5 px-5 pb-10">
+				<textarea class="p-2 border border-slate-400 w-96 h-96" v-model="memoContent"></textarea>
 			</div>
 		</div>
 		<script>
@@ -122,7 +116,7 @@
 					const dialog = ref(false);
 					const hourInSec = 3600;
 					const minInSec = 60;
-					const memoContent = ref('');
+					const memoContent = ref(localStorage.getItem('memo') ? JSON.parse(localStorage.getItem('memo')) : '');
 
 					function zeroPadding(num, len) {
 						let zero = '';
@@ -189,7 +183,7 @@
 						dialog.value = true;
 					};
 
-					function savuMemo() {
+					const saveMemo = () => {
 						const parsed = JSON.stringify(memoContent.value);
 						localStorage.setItem('memo', parsed);
 					};
@@ -206,11 +200,6 @@
 							updateDate();
 							dateUpdateId.value = setInterval(updateDate, 24 * 60 * 60 * 1000);
 						}, timeUntilMidnight);
-
-						const savuMemo = JSON.parse(localStorage.getItem('memo'));
-						if (savuMemo) {
-							memoContent.value = savuMemo;
-						}
 					});
 
 					onUnmounted(() => {
@@ -222,30 +211,26 @@
 						}
 					});
 
-					watch(sec, (newSec) => {
+					watch([memoContent, sec], ([newMemoContent, newSec]) => {
+						saveMemo();
+
 						if (!isTimerStopped.value && newSec <= 0) {
 							timeAlert();
 							resetTimer();
 						}
-					});
+					}, { deep: true });
 
 					return {
 						currentTime,
 						currentDate,
-						date,
-						initialTime,
 						cTime,
 						sec,
-						timerId,
 						isTimerStopped,
 						dialog,
-						hourInSec,
-						minInSec,
+						memoContent,
 						startTimer,
 						stopTimer,
 						resetTimer,
-						memoContent,
-						savuMemo
 					}
 				}
 			}).mount('#app')
